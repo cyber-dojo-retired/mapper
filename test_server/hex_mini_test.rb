@@ -2,6 +2,12 @@ require 'minitest/autorun'
 
 class HexMiniTest < MiniTest::Test
 
+  def initialize(arg)
+    super(arg)
+    @_hex_test_id = nil
+    @_hex_test_name = nil
+  end
+
   @@args = (ARGV.sort.uniq - ['--']).map(&:upcase) # eg 2E4
   @@seen_hex_ids = []
   @@timings = {}
@@ -19,7 +25,7 @@ class HexMiniTest < MiniTest::Test
         _hex_setup_caller(hex_id, hex_name)
         begin
           t1 = Time.now
-          self.instance_eval &test_block
+          self.instance_eval(&test_block)
           t2 = Time.now
           @@timings[hex_id+':'+src_file+':'+src_line+':'+hex_name] = (t2 - t1)
         ensure

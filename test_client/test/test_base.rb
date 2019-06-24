@@ -3,6 +3,10 @@ require_relative '../src/mapper_service'
 
 class TestBase < HexMiniTest
 
+  def initialize(arg)
+    super(arg)
+  end
+
   def mapper
     MapperService.new
   end
