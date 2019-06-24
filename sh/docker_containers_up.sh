@@ -1,23 +1,39 @@
 #!/bin/bash
 set -e
 
+ip_address()
+{
+  if [ -n "${DOCKER_MACHINE_NAME}" ]; then
+    docker-machine ip ${DOCKER_MACHINE_NAME}
+  else
+    echo localhost
+  fi
+}
+
+readonly IP_ADDRESS=$(ip_address)
+
+# - - - - - - - - - - - - - - - - - - - -
+
+curl_cmd()
+{
+  local -r port="${1}"
+  local -r path="${2}"
+  local -r cmd="curl --output /dev/null --silent --fail --data {} -X GET http://${IP_ADDRESS}:${port}/${path}"
+  echo "${cmd}"
+}
+
+# - - - - - - - - - - - - - - - - - - - -
+
 wait_until_ready()
 {
-  local name="${1}"
-  local port="${2}"
-  local method="${3}"
-  local max_tries=20
-  local cmd="curl --silent --fail --data '{}' -X GET http://localhost:${port}/${method}"
-  cmd+=" > /dev/null 2>&1"
-
-  if [ ! -z ${DOCKER_MACHINE_NAME} ]; then
-    cmd="docker-machine ssh ${DOCKER_MACHINE_NAME} ${cmd}"
-  fi
+  local -r name="${1}"
+  local -r port="${2}"
+  local -r max_tries=20
   echo -n "Waiting until ${name} is ready"
   for _ in $(seq ${max_tries})
   do
     echo -n '.'
-    if eval ${cmd} ; then
+    if $(curl_cmd ${port} ready?) ; then
       echo 'OK'
       return
     else
@@ -53,24 +69,29 @@ wait_until_up()
 
 exit_unless_clean()
 {
-  # This test for empty docker-logs relies on the rack server
-  # not syncing stdout. If sync is on/true then you get 3 lines:
-  #    Thin web server (v1.7.2 codename Bachmanity)
-  #    Maximum connections set to 1024
-  #    Listening on 0.0.0.0:4517, CTRL+C to stop
-  local name="${1}"
-  local docker_logs=$(docker logs "${name}")
+  local -r name="${1}"
+  local -r docker_log=$(docker logs "${name}")
+  local -r line_count=$(echo -n "${docker_log}" | grep -c '^')
   echo -n "Checking ${name} started cleanly..."
-  if [[ -z "${docker_logs}" ]]; then
+  if [ "${line_count}" == '3' ]; then
     echo 'OK'
   else
     echo 'FAIL'
-    echo "[docker logs ${name}] not empty on startup"
-    echo "<docker_logs>"
-    echo "${docker_logs}"
-    echo "</docker_logs>"
+    echo_docker_log "${name}" "${docker_log}"
     exit 1
   fi
+}
+
+# - - - - - - - - - - - - - - - - - - - -
+
+echo_docker_log()
+{
+  local -r name="${1}"
+  local -r docker_log="${2}"
+  echo "[docker logs ${name}]"
+  echo "<docker_log>"
+  echo "${docker_log}"
+  echo "</docker_log>"
 }
 
 # - - - - - - - - - - - - - - - - - - - -
@@ -83,7 +104,7 @@ docker-compose \
   -d \
   --force-recreate
 
-
 wait_until_ready "test-mapper-server" 4547 ready
 exit_unless_clean "test-mapper-server"
+
 wait_until_up "test-mapper-client"
