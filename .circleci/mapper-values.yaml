@@ -9,17 +9,17 @@ fullnameOverride: "mapper"
 replicaCount: 1
 
 
-volumes: 
+volumes:
   - name: mapper-tmp-dir
     emptyDir: {}
   - name: mapper-data
     persistentVolumeClaim:
-      claimName: mapper-data  
-       
+      claimName: mapper-data
+
 
 # containers
 # provide default values that you HAVE to overwrite in your values.yaml file
-containers: 
+containers:
   - name: mapper
     image: cyberdojo/mapper
     tag: "9e1ba1a"
@@ -30,11 +30,11 @@ containers:
       - name: mapper-tmp-dir
         mountPath: /tmp
         readOnly: false
-      - name: mapper-data 
+      - name: mapper-data
         mountPath: /porter
-        
 
-    resources: 
+
+    resources:
       limits:
        memory: 32Mi
       requests:
@@ -47,7 +47,7 @@ containers:
     #   port: 80
 
 envFromSecret: {}
- 
+
 
 nodeSelector: {}
 
@@ -56,12 +56,11 @@ affinity: {}
 tolerations: []
 
 # service
-service: 
+service:
   port: 4547
 
-pvc: 
+pvc:
   name: mapper-data
-  storage: 5Gi   
-
-  
-  
+  storage: 5Gi
+  matchLabels:
+    - target: mapper  
