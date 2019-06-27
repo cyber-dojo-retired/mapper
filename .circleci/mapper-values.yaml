@@ -63,4 +63,4 @@ pvc:
   name: mapper-data
   storage: 5Gi
   matchLabels:
-    - target: mapper  
+    target: "mapper"
