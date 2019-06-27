@@ -1,0 +1,67 @@
+# Default values for cyber-dojo-service.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# app name
+fullnameOverride: "mapper"
+
+# deployment spec
+replicaCount: 1
+
+
+volumes: 
+  - name: mapper-tmp-dir
+    emptyDir: {}
+  - name: mapper-data
+    persistentVolumeClaim:
+      claimName: mapper-data  
+       
+
+# containers
+# provide default values that you HAVE to overwrite in your values.yaml file
+containers: 
+  - name: mapper
+    image: cyberdojo/mapper
+    tag: "9e1ba1a"
+    securityContext:
+      runAsUser: 65534
+      fsGroup: 65533
+    volumeMounts:
+      - name: mapper-tmp-dir
+        mountPath: /tmp
+        readOnly: false
+      - name: mapper-data 
+        mountPath: /porter
+        
+
+    resources: 
+      limits:
+       memory: 32Mi
+      requests:
+       memory: 32Mi
+    # livenessProbe:
+    #   path: /health
+    #   port: 80
+    # readinessProbe:
+    #   path: /health
+    #   port: 80
+
+envFromSecret: {}
+ 
+
+nodeSelector: {}
+
+affinity: {}
+
+tolerations: []
+
+# service
+service: 
+  port: 4547
+
+pvc: 
+  name: mapper-data
+  storage: 5Gi   
+
+  
+  
