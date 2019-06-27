@@ -7,7 +7,7 @@ fullnameOverride: "mapper"
 
 # deployment spec
 replicaCount: 1
-
+updateStrategy: "Recreate"
 
 volumes:
   - name: mapper-tmp-dir
