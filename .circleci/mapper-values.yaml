@@ -5,7 +5,6 @@
 fullnameOverride: "mapper"
 
 replicaCount: 1
-updateStrategy: "Recreate"
 
 service:
   port: 4547
