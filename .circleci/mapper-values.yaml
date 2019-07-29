@@ -37,15 +37,15 @@ containers:
         mountPath: /porter
     resources:
       limits:
-       memory: 32Mi
+        memory: 32Mi
       requests:
-       memory: 32Mi
-    # livenessProbe:
-    #   path: /sha
-    #   port: 4547
-    # readinessProbe:
-    #   path: /ready?
-    #   port: 4547
+        memory: 32Mi
+      livenessProbe:
+        path: /sha
+        port: 4547
+      readinessProbe:
+        path: /ready?
+        port: 4547
 
 envFromSecret: {}
 

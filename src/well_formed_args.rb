@@ -7,7 +7,7 @@ require 'json'
 class WellFormedArgs
 
   def initialize(s)
-    @args = JSON.parse(s)
+    @args = json_parse(s)
   rescue
     raise ClientError.new('json:malformed')
   end
@@ -42,6 +42,14 @@ class WellFormedArgs
 
   attr_reader :args,
               :arg_name
+
+  def json_parse(s)
+    if s === ''
+      {}
+    else
+      JSON.parse(s)
+    end
+  end
 
   def arg
     args[arg_name]

@@ -26,6 +26,13 @@ class WellFormedArgsTest < TestBase
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'A05', %w(
+  ctor treats '' as {} for kubernetes liveness/readyness http probes ) do
+    WellFormedArgs.new('')
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
   # id6
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
