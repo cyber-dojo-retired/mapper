@@ -9,6 +9,12 @@ replicaCount: 1
 service:
   port: 4547
 
+pvc:
+  name: mapper-data
+  storage: 5Gi
+  matchLabels:
+    target: "mapper"
+
 volumes:
   - name: mapper-tmp-dir
     emptyDir: {}
@@ -48,9 +54,3 @@ nodeSelector: {}
 affinity: {}
 
 tolerations: []
-
-pvc:
-  name: mapper-data
-  storage: 5Gi
-  matchLabels:
-    target: "mapper"
