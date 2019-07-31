@@ -76,7 +76,7 @@ jobs:
               --values .circleci/mapper-values.yaml \
               --values .circleci/mapper-pvc-prod.yaml \
               prod-mapper \
-              praqma/cyber-dojo-service
+              praqma/cyber-dojo-service \
               --version 0.2.3
 
 workflows:
