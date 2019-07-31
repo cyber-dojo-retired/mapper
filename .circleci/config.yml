@@ -49,8 +49,8 @@ jobs:
               --install \
               --namespace=beta \
               --set-string containers[0].tag=${CIRCLE_SHA1:0:7} \
-              -f .circleci/mapper-values.yaml \
-              -f .circleci/mapper-pvc-beta.yaml \
+              -f [.circleci/mapper-values.yaml, \
+                  .circleci/mapper-pvc-beta.yaml] \
               beta-mapper \
               praqma/cyber-dojo-service \
               --version 0.2.3
@@ -73,8 +73,8 @@ jobs:
               --install \
               --namespace=prod \
               --set-string containers[0].tag=${CIRCLE_SHA1:0:7} \
-              -f .circleci/mapper-values.yaml \
-              -f .circleci/mapper-pvc-prod.yaml \
+              -f [.circleci/mapper-values.yaml, \
+                  .circleci/mapper-pvc-prod.yaml] \
               prod-mapper \
               praqma/cyber-dojo-service
               --version 0.2.3
