@@ -12,8 +12,8 @@ service:
 pvc:
   name: mapper-data
   storage: 5Gi
-  matchLabels:
-    target: "mapper"
+  #matchLabels:
+  #  target: "mapper"
 
 volumes:
   - name: mapper-tmp-dir
@@ -25,7 +25,6 @@ volumes:
 containers:
   - name: mapper
     image: cyberdojo/mapper
-    tag: ""
     securityContext:
       runAsUser: 65534
       fsGroup: 65533
