@@ -10,7 +10,8 @@ services:
     image: cyberdojo/mapper-client
     init: true
     container_name: test-mapper-client
-    ports: [4548:4548]
+    ports:
+      - 4548:4548
     read_only: true
     tmpfs: /tmp
     restart: 'no'
@@ -29,7 +30,8 @@ services:
     init: true
     container_name: test-mapper-server
     read_only: true
-    ports: [4547:4547]
+    ports:
+      - 4547:4547
     tmpfs: /tmp
     restart: 'no'
     volumes:
