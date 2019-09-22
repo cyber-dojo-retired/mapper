@@ -12,7 +12,7 @@ fi
 # - - - - - - - - - - - - - - - - - - - - -
 set -e
 
-export RUBYOPT=-w
+export RUBYOPT='-W2'
 
 rackup             \
   --env production \
